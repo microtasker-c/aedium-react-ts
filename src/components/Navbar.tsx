@@ -1,4 +1,11 @@
+import { NotePencilIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
+import {
+    SignedIn,
+    SignedOut,
+    // UserAvatar,
+    UserButton,
+} from '@neondatabase/neon-js/auth/react';
 
 function Navbar() {
     const navigate = useNavigate()
@@ -39,7 +46,7 @@ function Navbar() {
                     </label>
 
                     {/* Mobile toggle button */}
-                    <label htmlFor="navbar-1-toggle" className="btn btn-ghost lg:hidden">
+                    {/* <label htmlFor="navbar-1-toggle" className="btn btn-ghost lg:hidden">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-5 w-5"
@@ -54,19 +61,24 @@ function Navbar() {
                                 d="M4 6h16M4 12h8m-8 6h16"
                             />
                         </svg>
-                    </label>
+                    </label> */}
 
                     {/* Logo back to home */}
-                    <button className="btn btn-ghost text-xl">daisyUI</button>
+                    <button className="btn btn-ghost text-xl"
+                        onClick={
+                            () => navigate({
+                                to: '/'
+                            })
+                        }>Aediem</button>
                     <input
                         type="text"
                         placeholder="Search"
-                        className="input input-bordered w-38 lg:w-auto mr-1 rounded-4xl input-md"
+                        className="input input-bordered w-38 lg:w-auto mr-1 rounded-xl input-md"
                     />
                 </div>
 
                 {/* Desktop menu */}
-                <div className="navbar-center hidden lg:flex">
+                {/* <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
                         <li>
                             <button>Item 1</button>
@@ -88,15 +100,39 @@ function Navbar() {
                             <button>Item 3</button>
                         </li>
                     </ul>
-                </div>
+                </div> */}
 
                 {/* Login button */}
                 <div className="navbar-end">
-                    <button
-                        onClick={() => navigate({
-                            to: '/login'
-                        })}
-                        className="btn btn-sm sm:btn-md btn-primary">Login</button>
+
+                    <SignedIn>
+                        <button className="btn btn-sm hidden sm:inline-flex sm:btn-md mr-1 btn-ghost"
+                            onClick={() => navigate({
+                                to: '/editor'
+                            })}
+                        >
+                            <NotePencilIcon size={24} weight="thin" />
+                            Write
+                        </button>
+                    </SignedIn>
+
+                    {/* 登录按钮 */}
+                    <SignedOut>
+                        <button
+                            onClick={() => navigate({
+                                to: '/auth/$pathname',
+                                params: {
+                                    pathname: 'sign-in'
+                                }
+                            })}
+                            className="btn btn-sm sm:btn-md btn-secondary">Login</button>
+                    </SignedOut>
+
+                    {/* 已登录头像 */}
+
+                    <SignedIn>
+                        <UserButton size="icon"></UserButton>
+                    </SignedIn>
                 </div>
             </div>
 

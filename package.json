@@ -9,6 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@blocknote/core": "^0.56.0",
+    "@blocknote/mantine": "^0.56.0",
+    "@blocknote/react": "^0.56.0",
+    "@mantine/core": "^9.7.2",
+    "@mantine/hooks": "^9.7.3",
+    "@mantine/utils": "^6.0.22",
+    "@neondatabase/neon-js": "0.7.0-beta",
     "@phosphor-icons/react": "^2.1.10",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-router": "^1.170.45",

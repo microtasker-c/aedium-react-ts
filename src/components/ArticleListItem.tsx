@@ -12,7 +12,7 @@ function ArticleListItem() {
                 <div className="text-sm sm:text-2xl font-semibold opacity-60">Remaining Reason</div>
             </div>
             <div className="lg:tooltip"  data-tip='like'>
-                <button className="btn btn-square btn-secondary btn-sm">
+                <button className="btn btn-square btn-secondary btn-sm btn-ghost">
                     <HeartIcon size={24} />
                 </button>
             </div>

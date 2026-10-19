@@ -1,4 +1,14 @@
+import { GearIcon, HouseLineIcon, NotePencilIcon } from "@phosphor-icons/react";
+import { useNavigate } from "@tanstack/react-router";
+import {
+  SignedIn
+} from '@neondatabase/neon-js/auth/react';
+
+
 function Sidebar() {
+
+  const navigate = useNavigate()
+
   return (
     <div className="drawer-side is-drawer-close:overflow-visible">
       <label
@@ -10,25 +20,39 @@ function Sidebar() {
         {/* Sidebar content here */}
         <ul className="menu w-full grow">
           {/* List item */}
+
+          {/* Write */}
+          <SignedIn>
+            <li>
+              <button
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right sidebar-primary-item"
+                data-tip="Write"
+                onClick={() => navigate({
+                  to: '/editor'
+                })}
+              >
+                <NotePencilIcon size={24} />
+
+                <span className="is-drawer-close:hidden">Write</span>
+              </button>
+            </li>
+          </SignedIn>
+
+
+
           <li>
+            {/* Home icon */}
             <button
               className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
               data-tip="Homepage"
+              onClick={
+                () => navigate({
+                  to: '/'
+                })
+              }
             >
-              {/* Home icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2"
-                fill="none"
-                stroke="currentColor"
-                className="my-1.5 inline-block size-4"
-              >
-                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
-                <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              </svg>
+              <HouseLineIcon size={24} />
+
               <span className="is-drawer-close:hidden">Homepage</span>
             </button>
           </li>
@@ -40,27 +64,13 @@ function Sidebar() {
               data-tip="Settings"
             >
               {/* Settings icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2"
-                fill="none"
-                stroke="currentColor"
-                className="my-1.5 inline-block size-4"
-              >
-                <path d="M20 7h-9"></path>
-                <path d="M14 17H5"></path>
-                <circle cx="17" cy="17" r="3"></circle>
-                <circle cx="7" cy="7" r="3"></circle>
-              </svg>
+              <GearIcon size={24} />
               <span className="is-drawer-close:hidden">Settings</span>
             </button>
           </li>
         </ul>
       </div>
-    </div>
+    </div >
   );
 }
 
