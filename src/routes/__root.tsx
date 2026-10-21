@@ -11,12 +11,9 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 
+const queryClient = new QueryClient()
 
 const RootLayoutComponment = () => {
-
-  const queryClient = new QueryClient()
-
-
   return (
     < NeonAuthUIProvider authClient={authClient} >
       <QueryClientProvider client={queryClient}>

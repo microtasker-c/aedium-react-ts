@@ -3,7 +3,6 @@ import { useNavigate } from "@tanstack/react-router";
 import {
   SignedIn
 } from '@neondatabase/neon-js/auth/react';
-import { navigateToEditor } from "../utils/navigateHelper";
 
 
 function Sidebar() {
@@ -28,7 +27,9 @@ function Sidebar() {
               <button
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right sidebar-primary-item"
                 data-tip="Write"
-                onClick={() => navigateToEditor(navigate)}
+                onClick={() => navigate({
+                  to:'/editor'
+                })}
               >
                 <NotePencilIcon size={24} />
 

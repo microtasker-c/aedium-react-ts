@@ -6,8 +6,6 @@ import {
     // UserAvatar,
     UserButton,
 } from '@neondatabase/neon-js/auth/react';
-import { isEmailVerified } from "../utils/userHelper";
-import { navigateToEditor } from "../utils/navigateHelper";
 
 function Navbar() {
     const navigate = useNavigate()
@@ -110,7 +108,9 @@ function Navbar() {
 
                     <SignedIn>
                         <button className="btn btn-sm hidden sm:inline-flex sm:btn-md mr-1 btn-ghost"
-                            onClick={() => navigateToEditor(navigate)}
+                            onClick={() => navigate({
+                                to:'/editor'
+                            })}
                         >
                             <NotePencilIcon size={24} weight="thin" />
                             Write
