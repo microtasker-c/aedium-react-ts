@@ -1,6 +1,7 @@
 import { authClient } from "../auth";
+import type { User } from "../types/User";
 
-export async function getUserProfile() {
+export async function getUserProfile() : Promise<User | undefined>{
    const {data, error} = await authClient.getSession()
 
 
@@ -9,6 +10,8 @@ export async function getUserProfile() {
    }
 
    if (data?.user) {
+    // console.log(data, data.user);
+    
     return data.user
    }
 }

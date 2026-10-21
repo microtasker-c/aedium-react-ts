@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { sendVerifycationEmail, verifyEmailCode } from "../utils/emailVerifyHelper";
 import { useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 // import { toast } from "sonner";
 
 function EmailVerifyForm() {
@@ -8,9 +9,14 @@ function EmailVerifyForm() {
     const navigate = useNavigate()
     const [code, setCode] = useState('')
 
-    useEffect(() => {
-        sendVerifycationEmail()
-    }, [])
+
+    const { isLoading } = useQuery({
+        queryKey: ['send-verifycation-code'],
+        queryFn: async () => {
+            await sendVerifycationEmail()
+            setResendTimer(60)
+        }
+    })
 
 
     useEffect(() => {
@@ -18,14 +24,13 @@ function EmailVerifyForm() {
             setResendTimer((prev) => {
                 return prev - 1
             })
-
-            if (resendTimer <= 0) {
-                clearInterval(interval)
-            }
-
-
-            return () => clearInterval(interval)
         }, 1000)
+
+        if (resendTimer <= 0) {
+            clearInterval(interval)
+        }
+
+        return () => clearInterval(interval)
     }, [resendTimer])
 
     return (<>
@@ -52,12 +57,13 @@ function EmailVerifyForm() {
 
 
                 <button className="btn btn-soft btn-secondary mt-4"
-                    onClick={() => {
-                        sendVerifycationEmail()
+                    onClick={async () => {
+                        await sendVerifycationEmail()
                         setResendTimer(60)
                     }}
-                    disabled={resendTimer > 0}
-                >Resend Verify Email
+                    disabled={isLoading || resendTimer > 0}
+                >
+                    Resend Verify Email
                     {resendTimer > 0 && <span>({resendTimer})</span>}
 
                 </button>
