@@ -7,27 +7,36 @@ import styles from './ArticleEditor.module.css'
 // import { RedirectToSignIn, SignedIn } from "@neondatabase/neon-js/auth/react";
 import RequireLogin from "./RequireLogin";
 import RequireVerfiedEmail from "./RequireVerfiedEmail";
+import { useDraft } from "./draft";
+import {debounce} from 'es-toolkit'
+import { useEffect } from "react";
 
 function ArticleEditor() {
+    const { draft, setDraft} = useDraft()
+
     const editor = useCreateBlockNote({
         autofocus: true,
-        initialContent: [
-            {
-                type: 'heading',
-                props: {
-                    level: 1
-                },
-                content: 'Tell your story'
-            }
-        ]
+        initialContent: draft ?? undefined
     });
+
+    const saveDraft = debounce((document) => {
+        setDraft(document)
+    }, 500)
+
+    useEffect(() => {
+        return () => {
+            saveDraft.flush()
+            saveDraft.cancel()
+        }
+    }, [])
+
 
     return (
         // 路由守卫 --- 路由触及到此界面就会触发
         <RequireLogin>
             <RequireVerfiedEmail>
                 <RootLayout>
-                    <BlockNoteView className={styles.editor} editor={editor} />
+                    <BlockNoteView onChange={(editor) => saveDraft(editor.document)} className={styles.editor} editor={editor} />
                 </RootLayout>
             </RequireVerfiedEmail>
         </RequireLogin>

@@ -1,16 +1,18 @@
 import { NotePencilIcon } from "@phosphor-icons/react";
-import { useNavigate } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import {
     SignedIn,
     SignedOut,
     // UserAvatar,
     UserButton,
 } from '@neondatabase/neon-js/auth/react';
+import { Route } from "../routes/editor";
 
 function Navbar() {
     const navigate = useNavigate()
 
-
+    const location = useLocation()
+    const isEditorPage = location.pathname === Route.to
 
 
 
@@ -107,14 +109,22 @@ function Navbar() {
                 <div className="navbar-end">
 
                     <SignedIn>
-                        <button className="btn btn-sm hidden sm:inline-flex sm:btn-md mr-1 btn-ghost"
-                            onClick={() => navigate({
-                                to:'/editor'
-                            })}
-                        >
-                            <NotePencilIcon size={24} weight="thin" />
-                            Write
-                        </button>
+                        {!isEditorPage &&
+                            <button className="btn btn-sm hidden sm:inline-flex sm:btn-md mr-1 btn-ghost"
+                                onClick={() => navigate({
+                                    to: '/editor'
+                                })}
+                            >
+                                <NotePencilIcon size={24} weight="thin" />
+                                Write
+                            </button>
+                        }
+                        {isEditorPage &&
+                            <button className="btn btn-xs hidden sm:inline-flex sm:btn-md  mr-1 btn-accent ">
+                                {/* <NotePencilIcon size={24} weight="thin" /> */}
+                                Publish
+                            </button>
+                        }
                     </SignedIn>
 
                     {/* 登录按钮 */}
