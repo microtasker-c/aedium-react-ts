@@ -1,4 +1,4 @@
-import { NotePencilIcon } from "@phosphor-icons/react";
+import { NotePencilIcon, TrashIcon } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import {
     SignedIn,
@@ -7,12 +7,17 @@ import {
     UserButton,
 } from '@neondatabase/neon-js/auth/react';
 import { Route } from "../routes/editor";
+import { useAtom } from "jotai";
+import { isEditorEmptyAtom } from "../atoms/editor";
 
 function Navbar() {
     const navigate = useNavigate()
 
     const location = useLocation()
     const isEditorPage = location.pathname === Route.to
+
+    // jotai
+    const [isEditorEmpty, setIsEditorEmpty] = useAtom(isEditorEmptyAtom)
 
 
 
@@ -120,10 +125,28 @@ function Navbar() {
                             </button>
                         }
                         {isEditorPage &&
-                            <button className="btn btn-xs hidden sm:inline-flex sm:btn-md  mr-1 btn-accent ">
-                                {/* <NotePencilIcon size={24} weight="thin" /> */}
-                                Publish
-                            </button>
+
+                            <>
+                                {/* 发布功能 */}
+                                <button className="btn btn-xs hidden sm:inline-flex sm:btn-sm  mr-2 btn-accent "
+                                    disabled={isEditorEmpty}
+                                >
+                                    {/* <NotePencilIcon size={24} weight="thin" /> */}
+                                    Publish
+                                </button>
+
+
+                                {/* 删除功能 */}
+                                <button className="btn btn-xs hidden sm:inline-flex sm:btn-sm  mr-4 btn-error "
+                                    disabled={isEditorEmpty}
+                                    onClick={() => setIsEditorEmpty(true)}
+                                >
+                                    <TrashIcon size={24} />
+                                </button>
+                            </>
+
+
+
                         }
                     </SignedIn>
 

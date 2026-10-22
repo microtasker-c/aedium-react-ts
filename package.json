@@ -23,6 +23,7 @@
     "@tanstack/react-router": "^1.170.45",
     "@tanstack/react-router-devtools": "^1.167.2",
     "es-toolkit": "^1.52.0",
+    "jotai": "^3.0.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "sonner": "^2.0.8",

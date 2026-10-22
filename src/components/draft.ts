@@ -7,11 +7,8 @@ const DRAFT_KEY = 'draft'
 export function useDraft() {
     const [draft, setDraft] = useLocalStorage<PartialBlock[]>(DRAFT_KEY, [
         {
-            type: 'heading',
-            props: {
-                level: 1
-            },
-            content: 'Tell your story'
+            type: 'paragraph',
+            content: ''
         }
     ])
 
