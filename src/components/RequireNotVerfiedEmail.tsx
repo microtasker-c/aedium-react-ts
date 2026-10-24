@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useUserProfile } from "./useProfile";
 import { useEffect } from "react";
+import Loading from "./Loading";
 
 function RequireNotVerfiedEmail({ children }: { children: React.ReactNode }) {
     const { user, isLoading } = useUserProfile()
@@ -13,7 +14,7 @@ function RequireNotVerfiedEmail({ children }: { children: React.ReactNode }) {
     }, [isLoading, user])
 
     if (isLoading) {
-        return <span className="flex mx-auto min-h-screen loading loading-spinner loading-xl"></span>
+        return <Loading></Loading>
     }
 
     return children

@@ -8,7 +8,7 @@ import {
 } from '@neondatabase/neon-js/auth/react';
 import { Route } from "../routes/_app/_protected/editor";
 import { useAtomValue, useSetAtom } from "jotai";
-import { isEditorEmptyAtom, editorEmptySignalAtom } from "../atoms/editor";
+import { isEditorEmptyAtom, editorEmptySignalAtom, editorPublishSignalAtom } from "../atoms/editor";
 
 function Navbar() {
     const navigate = useNavigate()
@@ -19,6 +19,9 @@ function Navbar() {
     // jotai
     const isEditorEmpty = useAtomValue(isEditorEmptyAtom)
     const setEditorEmptySignal = useSetAtom(editorEmptySignalAtom)
+    const setEditorPublishSignal = useSetAtom(editorPublishSignalAtom)
+
+
 
 
 
@@ -131,6 +134,7 @@ function Navbar() {
                                 {/* 发布功能 */}
                                 <button className="btn btn-xs hidden sm:inline-flex sm:btn-sm  mr-2 btn-accent "
                                     disabled={isEditorEmpty}
+                                    onClick={() => setEditorPublishSignal((prev) => prev + 1)}
                                 >
                                     {/* <NotePencilIcon size={24} weight="thin" /> */}
                                     Publish

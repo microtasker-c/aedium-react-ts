@@ -1,49 +1,65 @@
-import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import "@blocknote/core/fonts/inter.css";
 import styles from './ArticleEditor.module.css'
 // import { RedirectToSignIn, SignedIn } from "@neondatabase/neon-js/auth/react";
-import RequireLogin from "./RequireLogin";
 import RequireVerfiedEmail from "./RequireVerfiedEmail";
 import { useDraft } from "./draft";
-import { debounce } from 'es-toolkit'
 import { useEffect } from "react";
-import { isEditorEmpty as isEditorEmptyHelper } from "../utils/editorHelper";
-import { useAtomValue, useSetAtom } from "jotai";
-import { editorEmptySignalAtom, isEditorEmptyAtom } from "../atoms/editor";
+import {  isEditorEmpty as isEditorEmptyHelper } from "../utils/editorHelper";
+import {  useAtomValue, useSetAtom } from "jotai";
+import { editorEmptySignalAtom, isEditorEmptyAtom, editorPublishSignalAtom } from "../atoms/editor";
+import { EDITOR_DEFAULT } from "../constants/editor";
+import { useEditor } from "./editor";
+import { userAtom } from "../atoms/user";
+// import { insertArticle } from "../services/apiArticle";
+import { usePublish } from "./publish";
 
 
 
 function ArticleEditor() {
-    const { draft, setDraft } = useDraft()
+    const { draft, setDraft, saveDraft } = useDraft()
+    const editor = useEditor(draft ?? EDITOR_DEFAULT)
+    let isRestoring = false;
+    const user = useAtomValue(userAtom)
 
-    const editor = useCreateBlockNote({
-        autofocus: true,
-        initialContent: draft ?? undefined
-    });
+    const editorPublishSignal = useAtomValue(editorPublishSignalAtom)
+    const setEditorPublishSignal = useSetAtom(editorPublishSignalAtom)
+
+    const {
+        publishArticle,
+        // isPublishing,
+    } = usePublish(editor)
+
+
+    useEffect(() => {
+        if (user && !isEditorEmptyHelper(editor.document) && editorPublishSignal) {
+            publishArticle({}, {
+                onSuccess: () => {
+                    setIsEditorEmpty(true)
+                    setDraft(EDITOR_DEFAULT)
+                    saveDraft.cancel()
+                    editor.replaceBlocks(editor.document, EDITOR_DEFAULT)
+
+                    setEditorPublishSignal(0)
+                },
+            })
+
+
+
+        }
+    }, [editorPublishSignal])
+
+
+
+
+
+
 
 
 
     const setIsEditorEmpty = useSetAtom(isEditorEmptyAtom)
     const editorEmptySignal = useAtomValue(editorEmptySignalAtom)
-
-    const saveDraft = debounce((document) => {
-        if (isEditorEmptyHelper(document)) {
-            setIsEditorEmpty(true);
-            setDraft([
-                {
-                    type: 'paragraph',
-                    content: ''
-                }
-            ])
-            return
-        }
-
-        setIsEditorEmpty(false) // 保存草稿后，设置为非空
-        setDraft(document)
-
-    }, 500)
 
     useEffect(() => {
         if (!isEditorEmptyHelper(editor.document)) {
@@ -60,30 +76,46 @@ function ArticleEditor() {
     useEffect(() => {
         if (editorEmptySignal) {
             // setIsEditorEmpty(true)
-            setDraft([
-                {
-                    type: 'paragraph',
-                    content: ''
-                }
-            ])
-            editor.replaceBlocks(editor.document, [
-                {
-                    type: 'paragraph',
-                    content: ''
-                }
-            ])
+            setDraft(EDITOR_DEFAULT)
+            editor.replaceBlocks(editor.document, EDITOR_DEFAULT)
+            setEditorPublishSignal(0)
         }
     }, [editorEmptySignal])
 
+
+    function handleEditorChange(changedEditor: typeof editor) {
+        if (isRestoring) {
+            isRestoring = false
+            return
+        }
+
+
+        if (isEditorEmptyHelper(changedEditor.document)) {
+            isRestoring = true
+            setIsEditorEmpty(true)
+            setDraft(EDITOR_DEFAULT)
+            saveDraft.cancel()
+
+            editor.replaceBlocks(editor.document, EDITOR_DEFAULT)
+            return
+        }
+
+        setIsEditorEmpty(false)
+        saveDraft(changedEditor.document)
+    }
+
+
     return (
-        // 路由守卫 --- 路由触及到此界面就会触发
-        <RequireLogin>
-            <RequireVerfiedEmail>
 
-                <BlockNoteView onChange={(editor) => saveDraft(editor.document)} className={styles.editor} editor={editor} />
+        <RequireVerfiedEmail>
 
-            </RequireVerfiedEmail>
-        </RequireLogin>
+            <BlockNoteView
+                className={styles.editor}
+                editor={editor}
+                onChange={(editor) => handleEditorChange(editor)}
+            />
+
+        </RequireVerfiedEmail>
     )
 }
 

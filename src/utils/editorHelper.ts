@@ -1,4 +1,5 @@
-import type { Block } from '@blocknote/core';
+import type { Block, BlockNoteEditor } from '@blocknote/core';
+import type { InsertArticle } from '../types/Article';
 
 type BlockContent = Block['content'];
 
@@ -42,4 +43,26 @@ export function isEditorEmpty(blocks: Block[]): boolean {
         }
         return isContentEmpty(block.content) && isEditorEmpty(block.children);
     });
+}
+
+
+// 构建文章
+export function buildArticleInsert(editor: BlockNoteEditor, userId: string): InsertArticle {
+    const [headingBlock, ...bodyBlocks] = editor.document
+
+    const headingMD = editor.blocksToMarkdownLossy([headingBlock])
+    const title = headingMD.replace(/# /g, '').trim(); // 去掉标题前的 # 符号
+
+    if (!title) {
+        throw new Error('文章标题不能为空');
+    }
+
+
+
+
+    return {
+        title,
+        content: JSON.stringify(bodyBlocks),
+        author_id: userId,
+    }
 }

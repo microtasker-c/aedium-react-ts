@@ -10,6 +10,8 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+// import { DevTools } from 'jotai-devtools'
+
 
 const queryClient = new QueryClient()
 
@@ -22,6 +24,7 @@ const RootLayoutComponment = () => {
         <Toaster richColors />
 
         <TanStackRouterDevtools />
+        {/* <DevTools position="bottom-right"></DevTools> */}
       </QueryClientProvider>
     </ NeonAuthUIProvider>
   )
