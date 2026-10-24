@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { authClient } from "../auth";
+import { authClient } from "../utils/neon";
 import { getUserProfile } from "./userHelper";
 import type {UseNavigateResult} from '@tanstack/react-router'
 

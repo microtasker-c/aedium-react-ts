@@ -6,9 +6,9 @@ import {
     // UserAvatar,
     UserButton,
 } from '@neondatabase/neon-js/auth/react';
-import { Route } from "../routes/editor";
-import { useAtom } from "jotai";
-import { isEditorEmptyAtom } from "../atoms/editor";
+import { Route } from "../routes/_app/_protected/editor";
+import { useAtomValue, useSetAtom } from "jotai";
+import { isEditorEmptyAtom, editorEmptySignalAtom } from "../atoms/editor";
 
 function Navbar() {
     const navigate = useNavigate()
@@ -17,7 +17,8 @@ function Navbar() {
     const isEditorPage = location.pathname === Route.to
 
     // jotai
-    const [isEditorEmpty, setIsEditorEmpty] = useAtom(isEditorEmptyAtom)
+    const isEditorEmpty = useAtomValue(isEditorEmptyAtom)
+    const setEditorEmptySignal = useSetAtom(editorEmptySignalAtom)
 
 
 
@@ -139,7 +140,7 @@ function Navbar() {
                                 {/* 删除功能 */}
                                 <button className="btn btn-xs hidden sm:inline-flex sm:btn-sm  mr-4 btn-error "
                                     disabled={isEditorEmpty}
-                                    onClick={() => setIsEditorEmpty(true)}
+                                    onClick={() => setEditorEmptySignal((prev) => prev + 1)}
                                 >
                                     <TrashIcon size={24} />
                                 </button>

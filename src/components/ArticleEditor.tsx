@@ -2,7 +2,6 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import "@blocknote/core/fonts/inter.css";
-import RootLayout from "./RootLayout";
 import styles from './ArticleEditor.module.css'
 // import { RedirectToSignIn, SignedIn } from "@neondatabase/neon-js/auth/react";
 import RequireLogin from "./RequireLogin";
@@ -11,8 +10,8 @@ import { useDraft } from "./draft";
 import { debounce } from 'es-toolkit'
 import { useEffect } from "react";
 import { isEditorEmpty as isEditorEmptyHelper } from "../utils/editorHelper";
-import { useAtom } from "jotai";
-import { isEditorEmptyAtom } from "../atoms/editor";
+import { useAtomValue, useSetAtom } from "jotai";
+import { editorEmptySignalAtom, isEditorEmptyAtom } from "../atoms/editor";
 
 
 
@@ -24,7 +23,10 @@ function ArticleEditor() {
         initialContent: draft ?? undefined
     });
 
-    const [isEditorEmpty, setIsEditorEmpty] = useAtom(isEditorEmptyAtom)
+
+
+    const setIsEditorEmpty = useSetAtom(isEditorEmptyAtom)
+    const editorEmptySignal = useAtomValue(editorEmptySignalAtom)
 
     const saveDraft = debounce((document) => {
         if (isEditorEmptyHelper(document)) {
@@ -56,7 +58,7 @@ function ArticleEditor() {
     }, [])
 
     useEffect(() => {
-        if (isEditorEmpty) {
+        if (editorEmptySignal) {
             // setIsEditorEmpty(true)
             setDraft([
                 {
@@ -71,15 +73,15 @@ function ArticleEditor() {
                 }
             ])
         }
-    }, [isEditorEmpty])
+    }, [editorEmptySignal])
 
     return (
         // 路由守卫 --- 路由触及到此界面就会触发
         <RequireLogin>
             <RequireVerfiedEmail>
-                <RootLayout>
-                    <BlockNoteView onChange={(editor) => saveDraft(editor.document)} className={styles.editor} editor={editor} />
-                </RootLayout>
+
+                <BlockNoteView onChange={(editor) => saveDraft(editor.document)} className={styles.editor} editor={editor} />
+
             </RequireVerfiedEmail>
         </RequireLogin>
     )

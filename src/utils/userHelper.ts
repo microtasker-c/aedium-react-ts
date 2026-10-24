@@ -1,4 +1,4 @@
-import { authClient } from "../auth";
+import { authClient } from "../utils/neon";
 import type { User } from "../types/User";
 
 export async function getUserProfile() : Promise<User | undefined>{

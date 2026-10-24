@@ -9,26 +9,27 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as EditorRouteImport } from './routes/editor'
-import { Route as AccountSettingsRouteImport } from './routes/account.settings'
+import { Route as AppRouteRouteImport } from './routes/_app/route'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppProtectedRouteRouteImport } from './routes/_app/_protected/route'
 import { Route as AuthPathnameRouteImport } from './routes/auth.$pathname'
 import { Route as AuthVerifyEmailRouteImport } from './routes/auth.verify-email'
+import { Route as AppProtectedEditorRouteImport } from './routes/_app/_protected/editor'
+import { Route as AppProtectedAccountSecurityRouteImport } from './routes/_app/_protected/account/security'
+import { Route as AppProtectedAccountSettingsRouteImport } from './routes/_app/_protected/account/settings'
 
-const IndexRoute = IndexRouteImport.update({
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRouteRoute,
 } as any)
-const EditorRoute = EditorRouteImport.update({
-  id: '/editor',
-  path: '/editor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AccountSettingsRoute = AccountSettingsRouteImport.update({
-  id: '/account/settings',
-  path: '/account/settings',
-  getParentRoute: () => rootRouteImport,
+const AppProtectedRouteRoute = AppProtectedRouteRouteImport.update({
+  id: '/_protected',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AuthPathnameRoute = AuthPathnameRouteImport.update({
   id: '/auth/$pathname',
@@ -40,83 +41,108 @@ const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
   path: '/auth/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppProtectedEditorRoute = AppProtectedEditorRouteImport.update({
+  id: '/editor',
+  path: '/editor',
+  getParentRoute: () => AppProtectedRouteRoute,
+} as any)
+const AppProtectedAccountSecurityRoute =
+  AppProtectedAccountSecurityRouteImport.update({
+    id: '/account/security',
+    path: '/account/security',
+    getParentRoute: () => AppProtectedRouteRoute,
+  } as any)
+const AppProtectedAccountSettingsRoute =
+  AppProtectedAccountSettingsRouteImport.update({
+    id: '/account/settings',
+    path: '/account/settings',
+    getParentRoute: () => AppProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/editor': typeof EditorRoute
-  '/account/settings': typeof AccountSettingsRoute
+  '/': typeof AppIndexRoute
   '/auth/$pathname': typeof AuthPathnameRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
+  '/editor': typeof AppProtectedEditorRoute
+  '/account/security': typeof AppProtectedAccountSecurityRoute
+  '/account/settings': typeof AppProtectedAccountSettingsRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/editor': typeof EditorRoute
-  '/account/settings': typeof AccountSettingsRoute
+  '/': typeof AppIndexRoute
   '/auth/$pathname': typeof AuthPathnameRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
+  '/editor': typeof AppProtectedEditorRoute
+  '/account/security': typeof AppProtectedAccountSecurityRoute
+  '/account/settings': typeof AppProtectedAccountSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/editor': typeof EditorRoute
-  '/account/settings': typeof AccountSettingsRoute
+  '/_app': typeof AppRouteRouteWithChildren
+  '/_app/_protected': typeof AppProtectedRouteRouteWithChildren
   '/auth/$pathname': typeof AuthPathnameRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/_protected/editor': typeof AppProtectedEditorRoute
+  '/_app/_protected/account/security': typeof AppProtectedAccountSecurityRoute
+  '/_app/_protected/account/settings': typeof AppProtectedAccountSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/editor'
-    | '/account/settings'
     | '/auth/$pathname'
     | '/auth/verify-email'
+    | '/editor'
+    | '/account/security'
+    | '/account/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/editor'
-    | '/account/settings'
     | '/auth/$pathname'
     | '/auth/verify-email'
+    | '/editor'
+    | '/account/security'
+    | '/account/settings'
   id:
     | '__root__'
-    | '/'
-    | '/editor'
-    | '/account/settings'
+    | '/_app'
+    | '/_app/_protected'
     | '/auth/$pathname'
     | '/auth/verify-email'
+    | '/_app/'
+    | '/_app/_protected/editor'
+    | '/_app/_protected/account/security'
+    | '/_app/_protected/account/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  EditorRoute: typeof EditorRoute
-  AccountSettingsRoute: typeof AccountSettingsRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   AuthPathnameRoute: typeof AuthPathnameRoute
   AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
-    '/editor': {
-      id: '/editor'
-      path: '/editor'
-      fullPath: '/editor'
-      preLoaderRoute: typeof EditorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/account/settings': {
-      id: '/account/settings'
-      path: '/account/settings'
-      fullPath: '/account/settings'
-      preLoaderRoute: typeof AccountSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_app/_protected': {
+      id: '/_app/_protected'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppProtectedRouteRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/auth/$pathname': {
       id: '/auth/$pathname'
@@ -132,13 +158,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthVerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/_protected/editor': {
+      id: '/_app/_protected/editor'
+      path: '/editor'
+      fullPath: '/editor'
+      preLoaderRoute: typeof AppProtectedEditorRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
+    '/_app/_protected/account/security': {
+      id: '/_app/_protected/account/security'
+      path: '/account/security'
+      fullPath: '/account/security'
+      preLoaderRoute: typeof AppProtectedAccountSecurityRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
+    '/_app/_protected/account/settings': {
+      id: '/_app/_protected/account/settings'
+      path: '/account/settings'
+      fullPath: '/account/settings'
+      preLoaderRoute: typeof AppProtectedAccountSettingsRouteImport
+      parentRoute: typeof AppProtectedRouteRoute
+    }
   }
 }
 
+interface AppProtectedRouteRouteChildren {
+  AppProtectedEditorRoute: typeof AppProtectedEditorRoute
+  AppProtectedAccountSecurityRoute: typeof AppProtectedAccountSecurityRoute
+  AppProtectedAccountSettingsRoute: typeof AppProtectedAccountSettingsRoute
+}
+
+const AppProtectedRouteRouteChildren: AppProtectedRouteRouteChildren = {
+  AppProtectedEditorRoute: AppProtectedEditorRoute,
+  AppProtectedAccountSecurityRoute: AppProtectedAccountSecurityRoute,
+  AppProtectedAccountSettingsRoute: AppProtectedAccountSettingsRoute,
+}
+
+const AppProtectedRouteRouteWithChildren =
+  AppProtectedRouteRoute._addFileChildren(AppProtectedRouteRouteChildren)
+
+interface AppRouteRouteChildren {
+  AppProtectedRouteRoute: typeof AppProtectedRouteRouteWithChildren
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppProtectedRouteRoute: AppProtectedRouteRouteWithChildren,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  EditorRoute: EditorRoute,
-  AccountSettingsRoute: AccountSettingsRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
   AuthPathnameRoute: AuthPathnameRoute,
   AuthVerifyEmailRoute: AuthVerifyEmailRoute,
 }
