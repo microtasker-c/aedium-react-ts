@@ -1,8 +1,3 @@
-import { BlockNoteView } from "@blocknote/mantine";
-import "@blocknote/mantine/style.css";
-import "@blocknote/core/fonts/inter.css";
-import styles from './ArticleEditor.module.css'
-// import { RedirectToSignIn, SignedIn } from "@neondatabase/neon-js/auth/react";
 import RequireVerfiedEmail from "./RequireVerfiedEmail";
 import { useDraft } from "./draft";
 import { useEffect } from "react";
@@ -14,6 +9,7 @@ import { useEditor } from "./editor";
 import { userAtom } from "../atoms/user";
 // import { insertArticle } from "../services/apiArticle";
 import { usePublish } from "./publish";
+import AppEditor from "./AppEditor";
 
 
 
@@ -109,11 +105,13 @@ function ArticleEditor() {
 
         <RequireVerfiedEmail>
 
-            <BlockNoteView
+            {/* <BlockNoteView
                 className={styles.editor}
                 editor={editor}
                 onChange={(editor) => handleEditorChange(editor)}
-            />
+            /> */}
+
+            <AppEditor editor={editor} onChange={(editor) => handleEditorChange(editor)}></AppEditor>
 
         </RequireVerfiedEmail>
     )
