@@ -1,7 +1,7 @@
 
 import ArticleListItem from "./ArticleListItem";
-import { getAllArticles } from "../services/apiArticle";
-import Loading from "./Loading";
+import { getAllArticles } from "@/services/apiArticle";
+import Loading from "@/ui/Loading";
 import { useQuery } from "@tanstack/react-query";
 
 

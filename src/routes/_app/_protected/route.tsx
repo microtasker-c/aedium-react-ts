@@ -1,9 +1,10 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import RequireLogin from '../../../components/RequireLogin'
-import { useUserProfile } from '../../../components/useProfile'
+import RequireLogin from '@/ui/RequireLogin'
+import { useUserProfile } from '@/hooks/useProfile'
 import { useSetAtom } from 'jotai'
-import { userAtom } from '../../../atoms/user'
+import { userAtom } from '@/atoms/user'
 import { useEffect } from "react";
+import RequireVerfiedEmail from '@/ui/RequireVerfiedEmail'
 
 export const Route = createFileRoute('/_app/_protected')({
   component: RouteComponent,
@@ -22,6 +23,10 @@ function RouteComponent() {
 
   return (
     <RequireLogin>
-      <Outlet></Outlet>
-    </RequireLogin>)
+      <RequireVerfiedEmail>
+        <Outlet></Outlet>
+      </RequireVerfiedEmail>
+    </RequireLogin>
+
+  )
 }

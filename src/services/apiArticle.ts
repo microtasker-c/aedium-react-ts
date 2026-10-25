@@ -1,4 +1,4 @@
-import type { InsertArticle } from "../types/Article";
+import type { InsertArticle, UpdateArticle } from "../types/Article";
 import { client } from "../utils/neon";
 
 const TABLE_NAME = 'article';
@@ -35,7 +35,11 @@ export async function insertArticle(insertArticle: InsertArticle) {
     return data;
 }
 
-
+/**
+ * 通过文章ID获取文章信息
+ * @param articleId 
+ * @returns 
+ */
 export async function getArticleById(articleId: number) {
     const { data, error } = await client
         .from(TABLE_NAME)
@@ -48,3 +52,42 @@ export async function getArticleById(articleId: number) {
 
     return data[0];
 }
+
+/**
+ * 通过文章ID更新文章信息
+ * @param articleId 
+ * @param updateArticle 
+ * @returns 
+ */
+export async function updateArticleById(articleId: number, updateArticle: UpdateArticle) {
+    const { data, error } = await client
+        .from(TABLE_NAME)
+        .update(updateArticle)
+        .eq('id', articleId)
+        .select();
+
+    if (error) {
+        throw error;
+    }
+    // console.log(data); // Log the updated data
+    return data;
+}
+
+
+export async function deleteArticleById(articleId: number) {
+    const { data, error } = await client
+        .from(TABLE_NAME)
+        .delete()
+        .eq('id', articleId)
+        .select();
+
+    if (error) {
+        throw error;
+    }
+    console.log(data); // Log the deleted data
+    return data;
+}
+
+
+
+

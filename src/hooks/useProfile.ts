@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
-import { getUserProfile } from "../utils/userHelper"
-import { authClient } from "../utils/neon"
+import { getUserProfile } from "@/utils/userHelper"
+import { authClient } from "@/utils/neon"
 import { toast } from "sonner"
-import type { User } from "../types/User"
+import type { User } from "@/types/User"
 import { useUploadAvatar } from "./userAvatar"
 
 

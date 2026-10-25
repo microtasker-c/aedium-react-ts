@@ -1,4 +1,4 @@
-import { useUserProfile } from "./useProfile";
+import { useUserProfile } from "../../hooks/useProfile";
 import AccountSettingForm from "./AccountSettingForm";
 
 

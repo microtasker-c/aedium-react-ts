@@ -6,21 +6,22 @@ import {
     // UserAvatar,
     UserButton,
 } from '@neondatabase/neon-js/auth/react';
-import { Route } from "../routes/_app/_protected/editor";
+import { Route } from "@/routes/_app/_protected/editor";
+import { Route as EditeRoute } from "@/routes/_app/_protected/articles.edit.$articleId";
 import { useAtomValue, useSetAtom } from "jotai";
-import { isEditorEmptyAtom, editorEmptySignalAtom, editorPublishSignalAtom } from "../atoms/editor";
+import { isEditorEmptyAtom, editorEmptySignalAtom, editorPublishSignalAtom, editorUpdateSignalAtom } from "@/atoms/editor";
 
 function Navbar() {
     const navigate = useNavigate()
 
     const location = useLocation()
     const isEditorPage = location.pathname === Route.to
-
+    const isEditPage = location.pathname.includes(EditeRoute.to.split('$')[0])
     // jotai
     const isEditorEmpty = useAtomValue(isEditorEmptyAtom)
     const setEditorEmptySignal = useSetAtom(editorEmptySignalAtom)
     const setEditorPublishSignal = useSetAtom(editorPublishSignalAtom)
-
+    const setEditorUpdateSignal = useSetAtom(editorUpdateSignalAtom)
 
 
 
@@ -118,7 +119,7 @@ function Navbar() {
                 <div className="navbar-end">
 
                     <SignedIn>
-                        {!isEditorPage &&
+                        {!isEditorPage && !isEditPage &&
                             <button className="btn btn-sm hidden sm:inline-flex sm:btn-md mr-1 btn-ghost"
                                 onClick={() => navigate({
                                     to: '/editor'
@@ -150,9 +151,25 @@ function Navbar() {
                                 </button>
                             </>
 
+                        }
 
+                        {/* Update button */}
+                        {isEditPage &&
+
+                            <>
+                                {/* 更新功能 */}
+                                <button className="btn btn-xs hidden sm:inline-flex sm:btn-sm  mr-2 btn-accent "
+                                    // disabled={isEditorEmpty}
+                                    onClick={() =>setEditorUpdateSignal((prev) => prev + 1)}
+                                >
+                                    {/* <NotePencilIcon size={24} weight="thin" /> */}
+                                    Update
+                                </button>
+                            </>
 
                         }
+
+
                     </SignedIn>
 
                     {/* 登录按钮 */}

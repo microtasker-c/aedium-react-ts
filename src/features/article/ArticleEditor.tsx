@@ -1,15 +1,14 @@
-import RequireVerfiedEmail from "./RequireVerfiedEmail";
 import { useDraft } from "./draft";
 import { useEffect } from "react";
-import {  isEditorEmpty as isEditorEmptyHelper } from "../utils/editorHelper";
-import {  useAtomValue, useSetAtom } from "jotai";
-import { editorEmptySignalAtom, isEditorEmptyAtom, editorPublishSignalAtom } from "../atoms/editor";
-import { EDITOR_DEFAULT } from "../constants/editor";
+import { isEditorEmpty as isEditorEmptyHelper } from "@/utils/editorHelper";
+import { useAtomValue, useSetAtom } from "jotai";
+import { editorEmptySignalAtom, isEditorEmptyAtom, editorPublishSignalAtom } from "@/atoms/editor";
+import { EDITOR_DEFAULT } from "@/constants/editor";
 import { useEditor } from "./editor";
-import { userAtom } from "../atoms/user";
+import { userAtom } from "@/atoms/user";
 // import { insertArticle } from "../services/apiArticle";
 import { usePublish } from "./publish";
-import AppEditor from "./AppEditor";
+import AppEditor from "@/ui/AppEditor";
 
 
 
@@ -102,18 +101,7 @@ function ArticleEditor() {
 
 
     return (
-
-        <RequireVerfiedEmail>
-
-            {/* <BlockNoteView
-                className={styles.editor}
-                editor={editor}
-                onChange={(editor) => handleEditorChange(editor)}
-            /> */}
-
-            <AppEditor editor={editor} onChange={(editor) => handleEditorChange(editor)}></AppEditor>
-
-        </RequireVerfiedEmail>
+        <AppEditor editor={editor} onChange={(editor) => handleEditorChange(editor)}></AppEditor>
     )
 }
 

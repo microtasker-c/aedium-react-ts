@@ -1,8 +1,8 @@
-import type { User } from "../types/User";
-import Avatar from "./Avatar";
-import { useUserUpdate } from "./useProfile";
+import type { User } from "../../types/User";
+import Avatar from "../../ui/Avatar";
+import { useUserUpdate } from "../../hooks/useProfile";
 import { Link } from "@tanstack/react-router";
-import { useChangeAvatar, useUploadAvatar } from "./userAvatar";
+import { useChangeAvatar, useUploadAvatar } from "../../hooks/userAvatar";
 
 
 function AccountSettingForm({ user }: { user: User }) {

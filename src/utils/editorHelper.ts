@@ -1,5 +1,4 @@
 import type { Block, BlockNoteEditor } from '@blocknote/core';
-import type { InsertArticle } from '../types/Article';
 
 type BlockContent = Block['content'];
 
@@ -47,7 +46,7 @@ export function isEditorEmpty(blocks: Block[]): boolean {
 
 
 // 构建文章
-export function buildArticleInsert(editor: BlockNoteEditor, userId: string): InsertArticle {
+export function buildArticleInsert(editor: BlockNoteEditor, userId: string) {
     const [headingBlock, ...bodyBlocks] = editor.document
 
     const headingMD = editor.blocksToMarkdownLossy([headingBlock])

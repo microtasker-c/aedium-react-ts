@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useUserProfile } from "./useProfile";
+import { useUserProfile } from "@/hooks/useProfile";
 import { useEffect } from "react";
 
 function RequireVerfiedEmail({ children }: { children: React.ReactNode }) {
