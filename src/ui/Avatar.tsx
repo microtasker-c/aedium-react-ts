@@ -7,6 +7,7 @@ function Avatar({ avatarFile = '', username }: { avatarFile?: string, username: 
             </div>
         </div>
 
+
     </>);
 }
 export default Avatar;

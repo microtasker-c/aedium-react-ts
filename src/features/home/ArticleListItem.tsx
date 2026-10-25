@@ -7,7 +7,7 @@ function ArticleListItem({ article }: { article: Article }) {
 
     // 获取文章简短描述
     // 递归解析内容块，提取文本内容
-    function getArticleBrief(content: string, maxLength = 100) {
+    function getArticleBrief(content: string, maxLength = 50) {
         const blocks = JSON.parse(content);
 
         let brief = '';
@@ -61,13 +61,13 @@ function ArticleListItem({ article }: { article: Article }) {
 
     return (<>
         <Link to='/articles/$articleId' params={{ articleId: `${article.id}` }}>
-            <li className="list-row h-40">
-                <div><img className="size-30 rounded-box" alt="Tailwind CSS list item" src="https://img.daisyui.com/images/profile/demo/1@94.webp" /></div>
+            <li className="list-row h-33">
+                <div><img className="size-26     rounded-box" alt="Tailwind CSS list item" src="https://img.daisyui.com/images/profile/demo/1@94.webp" /></div>
                 <div>
                     {/* 标题 */}
-                    <div className="text-2xl sm:text-5xl font-bold font-serif">{article.title}</div>
+                    <div className="text-2xl sm:text-4xl font-bold font-serif">{article.title}</div>
                     {/* 描述 */}
-                    <div className="text-sm sm:text-2xl font-semibold opacity-60">
+                    <div className="text-sm sm:text-lg font-semibold opacity-60">
                         {getArticleBrief(article.content)}
                     </div>
                 </div>

@@ -58,8 +58,8 @@ function AccountSettingForm({ user }: { user: User }) {
                 placeholder="Your username" />
 
             <Link className="link link-neutral text-center mt-2 mb-1"
-                to="/auth/$pathname"
-                params={{ pathname: 'forgot-password' }}>
+                to="/account/security"
+                >
                 reset password
             </Link>
 

@@ -5,9 +5,11 @@ import { useCurrentArticle } from "./article";
 import Loading from "@/ui/Loading";
 import { useAtom } from "jotai";
 import { editorUpdateSignalAtom } from "@/atoms/editor";
-import { useEffect } from "react";
+// import { useEffect, useRef, useState } from "react";
+import { useEffect} from "react";
 import { buildArticleInsert, isEditorEmpty } from "@/utils/editorHelper";
 import { updateArticleById } from "@/services/apiArticle";
+// import { useBlocker, useNavigate } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
 
 function ArticleEdit() {
@@ -16,13 +18,37 @@ function ArticleEdit() {
 
     const navigate = useNavigate();
 
+    // const initialArticle = useRef<string | null>(null)
+    // const [isDirty, setIsDirty] = useState(false)
 
-    const { article, isLoading } = useCurrentArticle(articleId, editor)
+
+    const { article, isLoading, isError } = useCurrentArticle(articleId, editor)
+    if (isError) {
+        navigate({to:'/auth/$pathname', params:{pathname: 'sign-in'}})
+    }
 
     // jotai
     const [editorUpdateSignal, setEditorUpdateSignal] = useAtom(editorUpdateSignalAtom)
 
 
+    // function handleEditorChange() {
+    //     if (!article || !initialArticle.current) {
+    //         return;
+    //     }
+
+    //     const currentArticleData = buildArticleInsert(editor, article.author_id)
+
+    //     const currentArticle = JSON.stringify({
+    //         title: currentArticleData.title,
+    //         content: currentArticleData.content,
+    //     })
+
+    //     // 比较
+    //     if (currentArticle !== initialArticle.current) {
+    //         setIsDirty(true)
+    //     }
+
+    // }
 
 
     async function handleUpdate() {
@@ -35,7 +61,7 @@ function ArticleEdit() {
         })
         setEditorUpdateSignal(0)
 
-        navigate({to:'/articles/$articleId', params:{articleId:articleId.toString()}})
+        navigate({ to: '/articles/$articleId', params: { articleId: articleId.toString() } })
     }
 
     useEffect(() => {
@@ -45,13 +71,42 @@ function ArticleEdit() {
 
     }, [editorUpdateSignal])
 
+// TODO: 有bug - 1.点击update也会跳转路由，因此触发  2.切换浏览器页面，
+
+    // useEffect(() => {
+    //     if (!isLoading && article) {
+    //         initialArticle.current = JSON.stringify({
+    //             title: article.title,
+    //             content: article.content,
+    //         })
+
+    //         setIsDirty(false)
+    //     }
+    // }, [isLoading, article])
+
+    // // 路由跳转拦截
+    
+    // useBlocker({
+    //     shouldBlockFn: () => {
+
+    //         if (!isDirty) return false; // 如果没有修改，不拦截
+
+
+    //         const shouldBlock = !window.confirm("You have unsaved changes, Are you sure you want to leave?")
+
+    //         return shouldBlock;
+    //     }
+    // })
+
+
     if (isLoading) return <Loading></Loading>
 
 
 
 
     return (<>
-        <AppEditor editor={editor} ></AppEditor>
+        {/* <AppEditor editor={editor} onChange={handleEditorChange}></AppEditor> */}
+        <AppEditor editor={editor}></AppEditor>
     </>);
 }
 export default ArticleEdit;

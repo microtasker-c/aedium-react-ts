@@ -5,7 +5,9 @@ import {
     useVerifyEmailCode,
 } from './verificationEmail';
 import {
+    RedirectToSignIn,
     SignedIn,
+    SignedOut,
     // SignedOut,
 } from '@neondatabase/neon-js/auth/react';
 import RequireNotVerfiedEmail from '@/ui/RequireNotVerfiedEmail';
@@ -22,48 +24,54 @@ function EmailVerifyForm() {
         useVerifyEmailCode(navigate);
 
     return (
-        <SignedIn>
-            <RequireNotVerfiedEmail>
-                <form className="flex items-center justify-center min-h-screen">
-                    <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-                        <h2 className="text-center text-4xl mb-4">Email Verification</h2>
+        <>
+            <SignedIn>
+                <RequireNotVerfiedEmail>
+                    <form className="flex items-center justify-center min-h-screen">
+                        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+                            <h2 className="text-center text-4xl mb-4">Email Verification</h2>
 
-                        <label className="label">Verification Code</label>
-                        <input
-                            type="text"
-                            inputMode="numeric"
-                            className="input"
-                            placeholder="Your Code"
-                            maxLength={6}
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
-                        />
+                            <label className="label">Verification Code</label>
+                            <input
+                                type="text"
+                                inputMode="numeric"
+                                className="input"
+                                placeholder="Your Code"
+                                maxLength={6}
+                                value={code}
+                                onChange={(e) => setCode(e.target.value)}
+                            />
 
-                        <button
-                            className="btn btn-secondary mt-4"
-                            onClick={(event) => {
-                                event.preventDefault();
-                                verifyEmailCode();
-                            }}
-                            disabled={isVerifying}
-                        >
-                            Verify
-                        </button>
-                        <button
-                            className="btn btn-secondary btn-soft mt-4"
-                            onClick={() => {
-                                sendVerificationEmail();
-                                setResendTimer(60);
-                            }}
-                            disabled={isSending || resendTimer > 0}
-                        >
-                            Resend Verification Email
-                            {resendTimer > 0 && <span>({resendTimer})</span>}
-                        </button>
-                    </fieldset>
-                </form>
-            </RequireNotVerfiedEmail>
-        </SignedIn>
+                            <button
+                                className="btn btn-secondary mt-4"
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    verifyEmailCode();
+                                }}
+                                disabled={isVerifying}
+                            >
+                                Verify
+                            </button>
+                            <button
+                                className="btn btn-secondary btn-soft mt-4"
+                                onClick={() => {
+                                    sendVerificationEmail();
+                                    setResendTimer(60);
+                                }}
+                                disabled={isSending || resendTimer > 0}
+                            >
+                                Resend Verification Email
+                                {resendTimer > 0 && <span>({resendTimer})</span>}
+                            </button>
+                        </fieldset>
+                    </form>
+                </RequireNotVerfiedEmail>
+            </SignedIn>
+
+            <SignedOut>
+                <RedirectToSignIn></RedirectToSignIn>
+            </SignedOut>
+        </>
     );
 }
 
